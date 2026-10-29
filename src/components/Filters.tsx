@@ -1,5 +1,3 @@
-import { FormEvent, useState } from "react";
-
 import { FilterOptions } from "../api";
 
 type Props = {
@@ -16,50 +14,25 @@ const SORTS = [
   ["title", "Name"],
 ] as const;
 
+type ChipProps = { label: string; checked: boolean; onChange: (checked: boolean) => void };
+
+/** A checkbox drawn as a chip. The real checkbox stays for keyboard and screen readers. */
+function ToggleChip({ label, checked, onChange }: ChipProps) {
+  return (
+    <label className={`chip ${checked ? "is-on" : ""}`}>
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <svg className="chip-icon" viewBox="0 0 12 12" aria-hidden="true">
+        <path d="M2.5 6.2 5 8.6l4.5-5" />
+      </svg>
+      {label}
+    </label>
+  );
+}
+
 /** All filters live in the URL (?size=M&on_sale=true…), so a filtered view can be bookmarked. */
 export function Filters({ options, params, onChange }: Props) {
-  const [q, setQ] = useState(params.get("q") ?? "");
-  const [minPrice, setMinPrice] = useState(params.get("min_price") ?? "");
-  const [maxPrice, setMaxPrice] = useState(params.get("max_price") ?? "");
-
-  function submit(e: FormEvent) {
-    e.preventDefault();
-    onChange({ q: q.trim() || null, min_price: minPrice || null, max_price: maxPrice || null });
-  }
-
   return (
     <section className="filters" aria-label="Filters">
-      <form className="filters-search" onSubmit={submit}>
-        <input
-          type="search"
-          placeholder="Search title or tags"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          aria-label="Search"
-        />
-        <input
-          type="number"
-          min={0}
-          inputMode="numeric"
-          placeholder={options?.min_price ? `Min ₹${Math.floor(Number(options.min_price))}` : "Min ₹"}
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-          aria-label="Minimum price"
-        />
-        <input
-          type="number"
-          min={0}
-          inputMode="numeric"
-          placeholder={options?.max_price ? `Max ₹${Math.ceil(Number(options.max_price))}` : "Max ₹"}
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-          aria-label="Maximum price"
-        />
-        <button type="submit" className="button">
-          Apply
-        </button>
-      </form>
-
       <div className="filters-row">
         <select value={params.get("size") ?? ""} onChange={(e) => onChange({ size: e.target.value || null })} aria-label="Size">
           <option value="">Any size</option>
@@ -91,23 +64,16 @@ export function Filters({ options, params, onChange }: Props) {
           ))}
         </select>
 
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={params.get("in_stock") !== "false"}
-            onChange={(e) => onChange({ in_stock: e.target.checked ? null : "false" })}
-          />
-          In stock only
-        </label>
-
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={params.get("on_sale") === "true"}
-            onChange={(e) => onChange({ on_sale: e.target.checked ? "true" : null })}
-          />
-          On sale
-        </label>
+        <ToggleChip
+          label="In stock only"
+          checked={params.get("in_stock") !== "false"}
+          onChange={(on) => onChange({ in_stock: on ? null : "false" })}
+        />
+        <ToggleChip
+          label="On sale"
+          checked={params.get("on_sale") === "true"}
+          onChange={(on) => onChange({ on_sale: on ? "true" : null })}
+        />
       </div>
     </section>
   );

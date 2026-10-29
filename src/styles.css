@@ -13,6 +13,7 @@
   --warn: #92400e;
   --radius: 10px;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 2px 8px rgb(0 0 0 / 0.04);
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%2371717a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
@@ -30,6 +31,7 @@
     --ok-bg: #14532d;
     --warn-bg: #451a03;
     --warn: #fcd34d;
+    --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%23a1a1aa' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     color-scheme: dark;
   }
 }
@@ -90,6 +92,7 @@ img {
 }
 
 .logo {
+  white-space: nowrap;
   font-weight: 800;
   letter-spacing: -0.03em;
   font-size: 1.15rem;
@@ -167,7 +170,6 @@ img {
   margin-bottom: 8px;
 }
 
-.filters-search,
 .filters-row {
   display: flex;
   flex-wrap: wrap;
@@ -175,37 +177,77 @@ img {
   align-items: center;
 }
 
-.filters input[type="search"] {
-  flex: 1 1 220px;
-}
-
-.filters input[type="number"] {
-  width: 120px;
-}
-
-input[type="search"],
-input[type="number"],
+/* Own arrow instead of the browser's: same spacing in every browser, colour follows the theme. */
 select {
+  appearance: none;
+  -webkit-appearance: none;
   font: inherit;
   color: inherit;
-  background: var(--surface);
+  background: var(--surface) var(--chevron) no-repeat right 12px center / 12px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: 8px 36px 8px 12px;
   min-height: 38px;
-}
-
-select {
+  cursor: pointer;
   text-transform: capitalize;
 }
 
-.check {
+/* Toggle chips ("In stock only", "On sale"): same size and border as the dropdowns. */
+.chip {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0 6px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 500;
   cursor: pointer;
   user-select: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.chip.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+/* Hidden but still focusable and clickable through the label. */
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.chip:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chip-icon {
+  display: none;
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chip.is-on .chip-icon {
+  display: block;
 }
 
 .result-count {
