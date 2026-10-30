@@ -734,3 +734,178 @@ button:disabled {
 .toast[hidden] {
   display: none;
 }
+
+/* ---------------------------------------------------------------- catalogue updates */
+
+.updates-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin: 40px 0 28px;
+}
+
+.updates-kicker {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.updates-head h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+}
+
+.updates-head .muted { margin: 0; }
+
+.catalogue-freshness {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+  margin: 0;
+}
+
+.catalogue-freshness time {
+  display: block;
+  color: var(--text);
+  margin-top: 3px;
+}
+
+.updates-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.change-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.change-filters button {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.change-filters button[aria-pressed="true"] {
+  color: var(--accent-text);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.change-filters button:focus-visible,
+.main-nav a:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+.updates-explainer,
+.product-checked,
+.history-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.updates-explainer { margin: 12px 0 18px; }
+.product-checked { margin: 12px 0; }
+.wishlist-intro { margin-top: -4px; }
+
+.card-badges {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  right: 52px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.card-badges .badge { position: static; }
+
+.update-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.update-price_drop { background: var(--ok-bg); color: var(--ok); }
+.update-restock { background: var(--warn-bg); color: var(--warn); }
+.update-new, .update-relisted {
+  background: light-dark(#edf2fb, #202e46);
+  color: light-dark(#355d99, #a4c2ef);
+}
+
+.card-brand {
+  color: var(--muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.change-summary { margin: 0; font-size: 0.76rem; overflow-wrap: anywhere; }
+.change-price_drop { color: var(--ok); }
+.change-restock { color: var(--warn); }
+
+.change-timeline { list-style: none; padding: 0; margin: 0; }
+.change-timeline li {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 0 0 22px 20px;
+  border-left: 1px solid var(--border);
+  margin-left: 3px;
+  font-size: 0.83rem;
+}
+.change-timeline li:last-child { border-left-color: transparent; padding-bottom: 4px; }
+.change-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 6px;
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  background: var(--text);
+}
+.change-timeline strong { font-weight: 600; }
+.change-timeline p { margin: 4px 0 0; color: var(--muted); }
+.change-timeline time { color: var(--muted); font-size: 0.72rem; flex-shrink: 0; }
+.history-note { border-top: 1px solid var(--border); padding-top: 12px; }
+.history-toggle { margin-top: 12px; font-size: 0.8rem; }
+
+@media (max-width: 640px) {
+  .header-inner { height: auto; min-height: 64px; flex-wrap: wrap; gap: 8px; padding-top: 10px; padding-bottom: 10px; }
+  .main-nav { flex-wrap: wrap; }
+  .main-nav a { padding: 6px 9px; font-size: 0.8rem; }
+  .updates-head { display: block; margin-top: 28px; }
+  .catalogue-freshness { text-align: left; margin-top: 18px; }
+  .catalogue-freshness time { display: inline; margin-left: 8px; }
+  .change-timeline li { flex-direction: column; gap: 4px; }
+  .grid { min-width: 0; }
+  .card { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid { transition: none; }
+}

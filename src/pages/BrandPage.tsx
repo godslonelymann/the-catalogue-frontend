@@ -81,7 +81,7 @@ export default function BrandPage({ brands }: { brands: Brand[] }) {
           ) : (
             <div className={`grid ${products.loading ? "is-loading" : ""}`}>
               {products.data.items.map((p) => (
-                <ProductCard key={p.id} product={p} onWishlistChange={(id) => setWishlistId(p.id, id)} />
+                <ProductCard key={p.id} product={p} showChanges={false} onWishlistChange={(id) => setWishlistId(p.id, id)} />
               ))}
             </div>
           )}

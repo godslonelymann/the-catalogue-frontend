@@ -36,3 +36,10 @@ export function formatDate(value: string | null): string {
   if (!value) return "";
   return new Date(value).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 }
+
+export function formatObservedAt(value: string): string {
+  return new Date(value).toLocaleString("en-IN", {
+    day: "numeric", month: "short", hour: "numeric", minute: "2-digit",
+    timeZone: "Asia/Kolkata", timeZoneName: "short",
+  });
+}

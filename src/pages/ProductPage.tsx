@@ -7,7 +7,8 @@ import { Message } from "../components/Message";
 import { Price } from "../components/Price";
 import { useToast } from "../components/Toast";
 import { WishlistButton } from "../components/WishlistButton";
-import { shopifyImage, sizeLabel } from "../format";
+import { ChangeHistory } from "../components/ProductChanges";
+import { formatObservedAt, shopifyImage, sizeLabel } from "../format";
 import { useLoad } from "../useLoad";
 
 // The description is the store's own HTML (often with a size chart table). Clean it before showing it.
@@ -71,9 +72,12 @@ export default function ProductPage() {
         <h1>{p.title}</h1>
         {main && <Price price={main.price} compareAt={main.compare_at_price} discount={main.discount_pct} />}
         {!p.is_active && <p className="notice">This product is no longer listed on the store.</p>}
+        {p.last_seen_at && <p className="product-checked">Last seen in store: <time dateTime={p.last_seen_at}>{formatObservedAt(p.last_seen_at)}</time></p>}
 
-        <h2 className="section-title">Sizes</h2>
-        <SizeList variants={p.variants} onChange={(variants) => update({ variants })} />
+        {p.is_active && <>
+          <h2 className="section-title">Sizes</h2>
+          <SizeList variants={p.variants} onChange={(variants) => update({ variants })} />
+        </>}
 
         <div className="product-actions">
           <WishlistButton
@@ -86,6 +90,8 @@ export default function ProductPage() {
             View on {p.brand_name} ↗
           </a>
         </div>
+
+        <ChangeHistory key={p.id} changes={p.changes ?? []} />
 
         {description && (
           <>

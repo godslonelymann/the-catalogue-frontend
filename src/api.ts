@@ -8,11 +8,24 @@ export type Page<T> = { items: T[]; total: number; page: number; page_size: numb
 
 export type Brand = { id: number; name: string; base_url: string; product_count: number };
 
+export type ChangeFilter = "" | "all" | "new" | "price_drop" | "restock" | "removed";
+export type ProductChange = {
+  id: number;
+  event_type: "new" | "price_drop" | "price_increase" | "restock" | "sold_out" | "removed" | "relisted";
+  variant_id: number | null;
+  variant_label: string | null;
+  old_price: string | null;
+  new_price: string | null;
+  observed_at: string;
+};
+export type UpdatePage = Page<ProductCard> & { last_checked_at: string | null };
+
 export type FilterOptions = {
   sizes: string[];
   categories: string[];
   min_price: string | null;
   max_price: string | null;
+  last_checked_at?: string | null;
 };
 
 export type ProductCard = {
@@ -31,6 +44,8 @@ export type ProductCard = {
   is_active: boolean;
   shopify_created_at: string | null;
   wishlist_id: number | null;
+  last_seen_at?: string;
+  recent_changes?: ProductChange[];
 };
 
 export type Variant = {
@@ -65,6 +80,8 @@ export type ProductDetail = {
   shopify_created_at: string | null;
   wishlist_id: number | null;
   variants: Variant[];
+  last_seen_at?: string;
+  changes?: ProductChange[];
 };
 
 export type WishlistItem = { id: number; added_at: string; product: ProductCard };
@@ -124,8 +141,10 @@ export const api = {
   products: (brandId: number, params: URLSearchParams) =>
     request<Page<ProductCard>>(`/brands/${brandId}/products?${params}`),
   product: (id: number) => request<ProductDetail>(`/products/${id}`),
+  updates: (params: URLSearchParams) => request<UpdatePage>(`/updates?${params}`),
 
-  wishlist: (page = 1) => request<Page<WishlistItem>>(`/wishlist?page=${page}&page_size=48`),
+  wishlist: (page = 1, change: ChangeFilter = "") =>
+    request<Page<WishlistItem>>(`/wishlist?page=${page}&page_size=48${change ? `&change=${change}` : ""}`),
   addToWishlist: (productId: number) =>
     request<WishlistItem>("/wishlist", { method: "POST", body: JSON.stringify({ product_id: productId }) }),
   removeFromWishlist: (wishlistId: number) => request<void>(`/wishlist/${wishlistId}`, { method: "DELETE" }),

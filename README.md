@@ -38,3 +38,14 @@ Every push to `main` redeploys. `vercel.json` sends all paths to `index.html` so
 | `/products/:id` | Gallery, sizes (in stock / sold out + "Alert me"), sanitized description |
 | `/wishlist` | Saved products |
 | `/alerts` | Restock alerts: waiting / back in stock |
+| `/updates` | Recent updates across brands, with change-type and brand filters |
+
+The original brand catalogue remains the homepage, with its existing filters and
+product cards. Recent updates has its own `/updates` page and navigation link.
+The updates page and wishlist filter by recent changes. Their cards show New, Price
+dropped, and Back in stock badges for seven days, including variant-specific price
+and restock details. Product pages show a recorded change timeline and the latest
+observation time. Wishlist keeps no-longer-listed products distinct from sold-out
+products. The UI uses actual API history, never inferred discounts or sample data.
+
+Deploy the updated pipeline schema, history backfill, and backend before this frontend.
